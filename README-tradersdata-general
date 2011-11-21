@@ -1,0 +1,89 @@
+
+   README-tradersdata-general
+
+   General information applying to all TradersData code.
+
+   Introduction
+   ------------
+   Almost everything that will make its way to github from TradersData
+   is the product of a financial markets trading venture that was built
+   in part on Linux with home-grown software (bash and Perl). Given the
+   data-intensive nature of the business, many projects center around
+   text data manipulation. There is also a strong bent towards automation
+   with particular attention to robustness (unavailable resources could
+   have material bottom line effects, even posing existential risk to the
+   business). Systems administration and cross-platform interoperability
+   (Linux / OS X [Free BSD] / Windows [cygwin]) are other areas of focus.
+
+   For more on TradersData see http://tradersdata.com.
+
+   Notes
+   -----
+   I had the good fortune to run a business that indulged a long-time
+   passion for IT, and depended on the skills that quest produced.
+   Because it was my own venture, and time, projects could be undertaken
+   that likely would not see the light of day if punching someone else's
+   clock, or delegating to others. If a project intrigued me, the added
+   hours were mine to bear. I've likened it, not disingenuously, to
+   running a parallel R&D unit.
+
+   http://tradersdata.com/CVblog/2010/10/my-rd-incubator/
+
+   That means some code began as "what if?" academic excursions. (There
+   certainly were quick-n-dirty solutions produced also, but those are
+   less interesting.) There will be some code segments, idioms, or even
+   entire projects which may cause head scratching. It must be understood
+   that these are parts of a total body of work, with some code having
+   origins going back nearly 15 years. The entire body of work exhibits
+   the full range of experience from rank beginner to something more than
+   that today.
+
+   Some ideas that pushed the envelope at the time, are a bit long in the
+   tooth today. For example, when I first started writing shell scripts,
+   bash was at version 1.x.x. At one point I had old systems still with
+   version 1 and newer systems with version 2. A library function was used
+   to test bash versions and provide workarounds as needed for development
+   code using new features unsupported by, but still needing to run under,
+   the old bash (e.g. using arrays vs. iterating through space delimited
+   strings). That function still exists on my systems today, although it
+   is categorized as deprecated (now with bash version 3.2.39).
+
+   A more recent example is comparisons of $parameter to ${parameter#word}
+   or ${parameter%word} expansions, where regular expression matching
+   would be more efficient and/or clear. Such code was first written
+   before (or before I was aware) bash supported regular expressions.
+
+   Most recently, machinations involving passing replaceable parameters
+   using $@ or $* are being replaced by $FUNCNAME, $BASH_ARGV, and
+   $BASH_ARGC arrays provided by "shopt -s extdebug."
+
+   Lastly, as parts of a total body of work, many pieces were integrated
+   in ways that may make them appear less sensible when separated for
+   publishing (see also README-tradersdata-local). And as mission critical
+   components, stability was valued over newfangled shiny parts, which
+   brings us full circle to the scratching of academic itches. Those
+   excursions were carried on apart from day-to-day business operations.
+
+   The learning done "on the side" benefitted the business generally by
+   encouraging a creative environment, and the work product contributed
+   directly once my comprehension of any particular concept could be
+   trusted in the enterprise. Those exercises usually entailed exploring
+   details, often tediously, to stretch understanding in ways only an
+   academic could find fruitful. Yes, sometimes the wheel was purposefully
+   reinvented.
+
+   Conclusion
+   ----------
+   If this README sounds defensive, that's not the intent. I've pushed
+   boundaries for decades. Code which might seemingly be embarrassing in
+   light of further learning, were produced as part of a commitment to a
+   quest of which I am proud and for which no apology is necessary.
+
+   This is all mentioned because there is no representation that any work
+   product viewed here is better, canonical, or necessarily efficient or
+   elegant. There are, I believe, some interesting parts and even those
+   areas which began more fancifully have proven useful to the author over
+   the years. Mostly, this publishing project documents the fruits of a
+   productive and fun journey.
+
+# $Id: v 0.00.00   2011/11/20 19:14:39  deh, cetus $
