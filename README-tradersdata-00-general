@@ -1,0 +1,88 @@
+
+   README-tradersdata-general
+
+   General information applying to all TradersData code.
+
+   Introduction
+   ------------
+   Most of what will make its way to github from TradersData is the
+   product of a financial markets trading venture that was built in part
+   on home-grown software (bash and Perl). Publishing the code is not to
+   represent any claim regarding the particulars, but to indicate the
+   range of experience.
+
+   It's not the new, new thing. It's about the new, new livelihood.
+
+   Given the data-intensive nature of the business, many projects center
+   around text data manipulation. There is also a strong bent towards
+   automation with particular attention paid to robustness, because data
+   extraction, transformation, staging and/or loading were mission
+   critical tasks that ran unattended, overnight, and carried potential
+   steep costs if not successfully completed before the business day
+   began. Systems administration and cross-platform* interoperability are
+   other areas of focus.
+
+   For more on TradersData see http://tradersdata.com.
+
+   * Systems included Linux, OS X (Free BSD), and Windows (cygwin).
+
+   Notes
+   -----
+   I had the good fortune to run a business that indulged a long-time
+   passion for IT, and depended on the skills that quest produced.
+   Because it was my own venture, and time, projects could be undertaken
+   that likely would not see the light of day if punching someone else's
+   clock, or delegating to others. If a project intrigued me, the added
+   hours were only mine to bear. I've likened it, not disingenuously, to
+   running a parallel R&D unit.
+
+   http://tradersdata.com/CVblog/2010/10/my-rd-incubator/
+
+   There may be code segments, even entire projects, which cause head
+   scratching. It must be understood that these are parts of a total body
+   of work, in terms of both variety and time frame. Some projects were
+   always narrowly scoped with specific business requirements and others
+   began as academic excursions. I'm also guilty of becoming interested
+   in new horizons at the expense of not revisiting projects that could
+   benefit from a rewrite using knowledge gained the first time through
+   and/or using subsequently updated language features.
+
+   For example, when I first started writing shell scripts, bash was at
+   version 1.x.x. (My current systems run 3.2.x and 4.2 was recently
+   released.) My first Perl scripts were written in Perl 5, but at a time
+   when people people were still transitioning from Perl 4. Even though
+   there hasn't been a major version number change since I began, the
+   language has grown greatly and CPAN even more.
+
+   As pieces that supported an enterprise, the choice was often made not
+   to fix what wasn't broken. It wasn't solely the distractions of new
+   academic itches that would prevent a return to old code. It was a
+   legitimate business decision that, once a project was deployed, and
+   absent cause, there were better outlets for my curiosity. So code that
+   might appear a bit long in the tooth, or lacking idiomatic style,
+   probably is. And that was ok. 
+   
+   Lastly, as a total body of work accomplished over many years, pieces
+   were integrated in ways that may appear less sensible when separated
+   for publishing (see also README-tradersdata-local).
+
+   Conclusion
+   ----------
+   If this README sounds defensive, that's not the intent. I've pushed
+   boundaries for decades. Some code that will be published here has
+   origins going back nearly 15 years. The entire body of work exhibits
+   the full range of experience from rank beginner to the current day.
+   Even code that is unimpressive today was product of a commitment to
+   learning of which I am proud and for which no apology is necessary.
+
+   This is all mentioned because there is no representation that any work
+   is better, necessarily efficient, or elegant. There are, I believe,
+   some interesting parts and even those areas which began more
+   fancifully have proven useful to the author over the years.
+
+   Mostly, publishing the work documents the fruits of a productive and
+   fun journey. It's not for the specific functionality, but to indicate
+   the breadth and depth of experience collected along the way. Of course,
+   if someone finds something useful, that's a welcome outcome too.
+
+# $Id: v 0.00.02   2011/12/11 06:57:10  deh, cetus $

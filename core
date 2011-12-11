@@ -1,0 +1,118 @@
+set -au
+shopt -s extdebug
+: ${LOGNAME:=$(whoami)}
+# PROG deprecated, to be retired in favor of SELF
+PROG=${0##*/}
+SELF=${0##*/}
+: ${BASHLIB_PATH:=~/dvl/bashlib/${HOSTNAME%%.*}:~/lib/bashlib\
+:/usr/local/share/bashlib}
+
+function use()
+{
+  if [ ! "${1-""}" ]; then
+     echo '[bashlib] use(): syntax error: missing required argument' 1>&2
+     exit 20
+  fi
+
+  # Short-circuit if $1 a valid command. This saves reloading the same
+  # module multiple times, but also prevents overloading an existing
+  # function or program. A "force" switch might be considered some day.
+
+  type ${1##*/} >/dev/null 2>&1 && return 0
+
+  local _libhome=''
+  for __lib_d in ${BASHLIB_PATH//:/ }; do
+     eval "__lib_d=$__lib_d"     # make sure all ~ get expanded
+     [ -r $__lib_d/$1 ] && _libhome=$__lib_d && break
+  done
+  if [ ! "$_libhome" ]; then
+     echo "[bashlib] use(): Can't use $1${2:+ $2}" 1>&2
+     exit 20
+  fi
+
+  # Source .vars files related to $1
+  # (for examples below, assume $1 = dir/subdir/func)
+
+  # 1) .vars in $1 base directory   (e.g. dir/.vars)
+
+  test -r $_libhome/${1%%/*}/.vars && . $_
+
+  # 2) .vars file in $1 directory   (e.g. dir/subdir/.vars)
+
+  [ $_libhome/${1%%/*}/.vars != $_libhome/${1%/*}/.vars ] \
+    && test -r $_libhome/${1%/*}/.vars && . $_
+
+  # 3) .vars.${1##*/} in $1 directory   (e.g. dir/subdir/.vars.func)
+
+  test -r $_libhome/${1%/*}/.vars.${1##*/} && . $_
+
+  . $_libhome/$1 || exit $?
+  return 0
+}
+
+function require()
+{
+  local _var=''
+  local _opt=''
+  local _dbg=''
+  local _err_=''
+  while [ "${1:-""}" ]; do
+     [ "$_err_" ] && break
+     case $1 in
+        -*)
+            if [ "$1" != '--null-ok' ]; then
+               echo "require: '$1' option unknown" 1>&2
+               exit 40
+            fi
+            _opt=$1
+            shift ;;
+         *)
+            if [ "$_var" ]; then
+               _dbg="$1"
+            else
+               _var=$1   # set, even on error, for err message below
+               if [[ $1 =~ (^[^a-zA-Z_]|[^0-9a-zA-Z_]) ]]; then
+                  _err_='invalid variable name'
+               fi
+            fi
+            shift ;;
+     esac
+  done
+  if [ "$_err_" ]; then
+     echo "[bashlib] require: '\$$_var' is $_err_${_dbg:+ $_dbg}" 1>&2
+     exit 21
+  fi
+  if [ -z "$_var" ]; then
+     echo '[bashlib] require(): syntax error: missing required argument' 1>&2
+     exit 40
+  fi
+
+  # Next figure out if set but null, or unset, and what to do. For this,
+  # nounset can not be set, so save $- first, for *exact* restoration.
+
+  local _xset_=$-
+  set +u
+  eval "[ \"\${$_var-unset}\" = \"\${$_var-unset}\${$_var+unset}\" ]" \
+    && _err_=unset
+  if eval "[ \"\${$_var}\${$_var+null}\" = null ]"; then
+     [ "$_opt" = '--null-ok' ] || _err_='set, but null'
+  fi
+  if [ "$_err_" ]; then
+     echo "[bashlib] require: \$$_var is $_err_${_dbg:+ $_dbg}" 1>&2
+     exit 21
+  fi
+  set -$_xset_
+}
+
+# Copyright 2007 Donald E. Hammond, TradersData.com
+
+# This program is free software. The license terms are simple: all
+# rights are granted to do anything with this code, except take it 
+# and claim it as your own. If it is used or distributed publicly,
+# attribution is required.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+# $Id: v 1.01.33   2011/12/09 03:35:56  root, cetus $

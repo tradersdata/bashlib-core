@@ -1,0 +1,73 @@
+
+   README-bashlib
+
+   First Thing
+   -----------
+
+   This bashlib ought not be confused with http://bashlib.sourceforge.net/
+   which "is a shell script that makes CGI programming in the bash shell
+   easier, or at least more tolerable." TradersData bashlib has been
+   ongoing for nearly 15 years, although privately and never published.
+   I trust the name will not be a problem since neither this bashlib, nor
+   the other, is likely to become ubiquitous and get in the other's way.
+
+
+   Introduction
+   ------------
+
+   TradersData bashlib is a collection of libraries for the bash shell
+   and a framework to use them.
+
+   The original purposes were both functional and academic curiosity. The
+   immediate goal was dynamically loadable functions, to eliminate copying
+   and pasting of identical or slightly modified code from script to
+   script. One set of precipitating factors was:
+
+     - A regular need for option/argument parsing with features extended
+       beyond those provided by getopt or getopts.
+     - Long and often contorted "while [ $1 ]; do ; done" blocks that
+       frequently grew from that need.
+     - The similar (but different enough to be a pain) implementations of
+       such loops between scripts.
+     - The consequent desire for a generalized solution that could be
+       moved "under the hood."
+
+   And bashlib was born. The syntax and some features were inspired by
+   Perl module usage. The bastardization is my responsibility alone.
+   Now the "while [ $1 ]; do ; done" blocks can be neatly replaced with:
+
+      source /path/to/bashlib/core
+      use std/parse-opts
+      parse-opts OPTSTR "$@"
+
+
+   Although parts of the framework and some functions are creatively
+   productive, others are brute force hacks. The former is where the
+   publishing interest is, but they often depend on the latter. So the
+   full range will be out there -- the good, the bad, and the ugly.
+
+   In addition to the basic goal of reusable code, most libraries are
+   written in pure bash without use of external utilities. This was one
+   of the original academic interests, but the project's usefulness
+   quickly became apparent and, where business needs dictated function
+   over form, the no dependencies "rule" was scuttled. The code contains
+   hints where academic itches were being scratched, the strongest being
+   where great effort is curiously expended to avoid dependencies.
+   
+   bashlib is not a novel concept and the objective for publishing is
+   not to represent it as a necessarily efficient or elegant solution
+   for any particular task, or not, but to indicate a range and depth of
+   experience. It hopefully contains an interesting mix of practical and
+   theoretical. Even where a more circuitous route than necessary is
+   traversed to reach a destination, the bashlib libraries provide
+   functionality the author has found useful over the years.
+ 
+   Please also see the following documents:
+
+      README-tradersdata-00-general     introductory information.
+
+      README-tradersdata-01-local       local quirks and conventions.
+
+      README-tradersdata-bashlib-core   functionality and usage.
+
+# $Id: v 0.00.00   2011/12/11 10:52:10  deh, cetus $

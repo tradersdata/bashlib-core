@@ -1,0 +1,168 @@
+
+   README-tradersdata-bashlib-core
+
+   -------------------------------------------------------------------------
+   n.b. tradersdata / bashlib should not be confused with the project of the
+   same name, hosted on sourceforge.net, which provides CGI functionality.
+   -------------------------------------------------------------------------
+
+bashlib(1)                    TradersData bashlib                   bashlib(1)
+
+NAME
+       bashlib - libraries and framework for bash shell
+
+SYNOPSIS
+        source /usr/local/share/bashlib/core
+        use some/func [ "trace/dbg/info string" ]
+
+DESCRIPTION
+       bashlib is a collection of libraries for the bash(1) shell and the
+       framework to use them.  The functions are dynamically imported, usually
+       in a script. This manual describes the framework features and usage.
+
+       Sourcing /usr/local/share/bashlib/core (example location) initializes
+       the framework by defining two functions: use and require. It also
+       ensures environment variables LOGNAME, SELF, and BASHLIB_PATH are
+       set.[1]  LOGNAME defaults to the output from whoami(1) and SELF is
+       assigned the basename of the caller ($0). BASHLIB_PATH, explained
+       below, gets a suitable default if necessary.
+
+       The use and require functions are not technically required, as the
+       libraries can be sourced directly. The functions are recommended,
+       however, because some libraries use others, and implementation is
+       within this framework. Sourcing libraries directly without first
+       sourcing core may work, but probably won't without modifications.
+
+       Usage
+
+       use category/lib [ trace|dbg|info ]
+
+       This is the core function, and its one required argument is the library
+       file to be sourced.  An optional second argument, if given, is passed
+       through to any error messages and can be used for a rudimentary stack
+       trace or anything else of interest to the programmer.  use provides a
+       couple of features.
+
+           Search BASHLIB_PATH
+
+           use searches BASHLIB_PATH analogous to the way the shell uses PATH,
+           only better -- a relative path can be passed. For example, if
+           /usr/local/share/bashlib is in BASHLIB_PATH, and file
+           /usr/local/share/bashlib/some/file exists, it will be found with:
+
+                   use some/file
+
+           BASHLIB_PATH allows library collections in different locations
+           (e.g.  system, user, development) and relative paths allow library
+           hierarchies organized, remembered, and called by any criteria
+           imaginable (e.g.  std/reverse, ui/menu, file/fstat, math/commify,
+           admin/cron/log-time).
+
+           Does not redundantly reload libraries
+
+           For many applications, loading a library once, often near the top
+           of the script, is optimal and sufficient.  For others, module use
+           may be conditional.  Still further, there may be dozens or more
+           places where it might be used, but not determined until run time.
+
+           The solution is to import the functon dynamically, only when
+           needed.  use checks if a command by the name requested is already
+           defined and, if it is, returns immediately, skipping the reload of
+           the same code.  This allows use some/func to be executed multiple
+           times throughout a program, with the file being sourced at most
+           one time.[2][3]
+
+           Variables set for different functions within library groups
+
+           The use function automatically sources related files containing
+           variable assignments, if they exist. This provides a facility for
+           functions sharing a category and/or subcategory (i.e. directories)
+           to also automatically share the same variables, set consistently
+           within groups and across executions.
+
+           For example:
+
+           use dir/subdir/func
+
+           The use function sources each of the following files, if it exists:
+
+              dir/.vars
+              dir/subdir/.vars
+              dir/subdir/.vars.func
+
+       require VARIABLE [ --null-ok ] [ trace|dbg|info ]
+
+       The require function is similar to bash set -u (or set -o nounset). The
+       differences are: it operates on a specific VARIABLE, rather than being
+       set generally; error messages are more informative; and it bails on a
+       variable that's set but null (empty string). This last behavior can be
+       changed with --null-ok.  Error messages will have debug info appended
+       if it's passed to the function, allowing something like (in a script
+       name "foo"):
+
+           require VAR [$SELF:$LINENO]  #  n.b. VAR not $VAR
+
+       This exits with the following error message if VAR unset:
+
+           [bashlib] require: $VAR is unset [foo:15]
+
+       or exits with the following error message if VAR is null:
+
+           [bashlib] require: $VAR is set, but null [foo:15]
+
+       The latter would continue without event if --null-ok were added.
+
+
+       Notes
+
+       1. A fourth variable, PROG, is set by core. PROG is deprecated,
+       replaced by SELF, but still set for for backwards compatibility. It
+       should not be relied upon.
+
+       Two other variables, BASHLIB_STAT and BASHLIB_ERR are commonly used in
+       modules. They are guaranteed to exist any time an imported function
+       returns a non-zero status, if bashlib::liberr(1) is used to process
+       trapped errors, as most libraries do.
+
+       2. In typical form, a library file contains a single function of the
+       same name.  For example std/lc provides the lc function from the std
+       category, which converts a string to lower case:
+
+         % . /usr/local/share/bashlib/core
+         % use std/lc
+         % var=AbCd
+         % lc var
+         % echo $var
+         abcd
+
+       Library files are not limited to a single function. It is not required
+       that a function in the file match the filename.  It doesn't have to
+       contain any functions at all, but then the bashlib optimizations are
+       completely unnecessary.
+
+       When writing a library file, if it does not contain a function of the
+       same name, adding a dummy preserves the feature preventing redundant
+       importing of the same code. For example, some/crazylib provides
+       multiple functions, none named crazylib. Adding this to the library
+       file is all that is needed:
+
+          function crazylib { :; }
+
+       3. The method that prevents redundant loading of functions prevents
+       overloading also. This possible feature has been considered, but only
+       theoretically as a specific need has never existed.
+
+COPYRIGHT
+       Copyright 2007 Donald E. Hammond, TradersData.com
+
+       This program is free software. The license terms are simple: all
+       rights are granted to do anything with this code, except take it
+       and claim it as your own. If it is used or distributed publicly,
+       attribution is required.
+
+       This program is distributed in the hope that it will be useful,
+       but WITHOUT ANY WARRANTY; without even the implied warranty of
+       MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+9/Dec/2011                       core v1.01.33                      bashlib(1)
+
