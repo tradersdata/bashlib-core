@@ -31,7 +31,8 @@ DESCRIPTION
        libraries can be sourced directly. The functions are recommended,
        however, because some libraries use others, and implementation is
        within this framework. Sourcing libraries directly without first
-       sourcing core may work, but probably won't without modifications.
+       sourcing bashlib/core may work, but probably won't without
+       modifications.
 
        Usage
 
@@ -92,13 +93,13 @@ DESCRIPTION
 
        require VARIABLE [ --null-ok ] [ trace|dbg|info ]
 
-       The require function is similar to bash set -u (or set -o nounset). The
-       differences are: it operates on a specific VARIABLE, rather than being
-       set generally; error messages are more informative; and it bails on a
-       variable that's set but null (empty string). This last behavior can be
-       changed with --null-ok.  Error messages will have debug info appended
-       if it's passed to the function, allowing something like (in a script
-       name "foo"):
+       The require function is similar to bash: set -u (or set -o nounset).
+       The differences are: it operates on a specific VARIABLE, rather than
+       being set generally; error messages are more informative; and it bails
+       on a variable that's set but null (empty string). This last behavior
+       can be changed with --null-ok.  Error messages will have debug info
+       appended if it's passed to the function, allowing something like
+       (in a script named "foo"):
 
            require VAR [$SELF:$LINENO]  #  n.b. VAR not $VAR
 
@@ -115,7 +116,7 @@ DESCRIPTION
 
        Notes
 
-       1. A fourth variable, PROG, is set by core. PROG is deprecated,
+       1. A fourth variable, PROG, is set by bashlib/core. PROG is deprecated,
        replaced by SELF, but still set for for backwards compatibility. It
        should not be relied upon.
 
